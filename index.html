@@ -1,79 +1,112 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Dashboard</title>
+    <title>Student Fee Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .login-container, .data-container { max-width: 500px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .data-container { max-width: 800px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #2c3e50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1a252f; }
+        .error { color: red; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #2c3e50; color: white; }
+        .logout { float: right; }
+    </style>
 </head>
 <body>
-<h2>ছাত্র/ছাত্রী ফি তথ্য</h2>
+    <div id="loginDiv" class="login-container">
+        <h2>Student Login</h2>
+        <input type="text" id="studentId" placeholder="Student ID" />
+        <input type="text" id="name" placeholder="Full Name" />
+        <input type="text" id="mobile" placeholder="Mobile Number" />
+        <button onclick="login()">Login</button>
+        <div id="loginError" class="error"></div>
+    </div>
 
-<label>Enter your Student ID:</label>
-<input type="text" id="studentId">
-<button onclick="loadStudentData()">Login</button>
+    <div id="dataDiv" class="data-container" style="display:none;">
+        <h2>Your Fee Details <button class="logout" onclick="logout()">Logout</button></h2>
+        <div id="studentInfo"></div>
+        <div id="feeTable"></div>
+    </div>
 
-<div id="studentData" style="display:none;">
-<h3>Your Fee History</h3>
-<table border="1" id="feeTable" style="border-collapse:collapse;">
-<thead>
-<tr>
-<th>Month</th><th>Tuition</th><th>Admission</th><th>Re-Admission</th><th>Exam</th><th>Computer</th>
-<th>Late</th><th>Sports</th><th>T.C</th><th>Miscellaneous</th><th>Payment Date</th><th>PDF</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<p id="totalFees"></p>
-</div>
+    <script>
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycby4D-wrff-70DVGCOfCecKznqo7Eqd14vwXkUcVBAg6kZxYyxAtyj3yecmgPT_UcaRb/exec'; // Replace with your deployed URL
+        let currentStudentId = null;
 
-<script>
-const webAppUrl = "https://script.google.com/macros/s/AKfycbxNKU4GFa_2XJSpvbMiaE5AFidUvpvHGRatGsgBFORm_cEuD0Ksm9OKIYI1CYLEN0C5UQ/exec"; // Apps Script URL
+        async function login() {
+            const studentId = document.getElementById('studentId').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
 
-function loadStudentData(){
-  const studentId = document.getElementById("studentId").value;
-  fetch(webAppUrl+"?studentId="+studentId)
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.error){
-      alert(data.error);
-      return;
-    }
+            if (!studentId || !name || !mobile) {
+                document.getElementById('loginError').innerText = 'All fields required';
+                return;
+            }
 
-    document.getElementById("studentData").style.display="block";
-    const tbody = document.querySelector("#feeTable tbody");
-    tbody.innerHTML="";
+            try {
+                const url = `${scriptUrl}?action=validateStudent&studentId=${encodeURIComponent(studentId)}&name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mobile)}`;
+                const response = await fetch(url);
+                const result = await response.json();
 
-    let total = 0;
-    for(let i=1;i<data.length;i++){ // skip header
-      const row = data[i];
-      const tr = document.createElement("tr");
-      for(let j=0;j<row.length;j++){
-        tr.innerHTML += "<td>"+row[j]+"</td>";
-      }
-      // PDF download button
-      tr.innerHTML += `<td><button onclick="downloadPDF('${studentId}',${i+1})">PDF</button></td>`;
-      tbody.appendChild(tr);
+                if (result.success) {
+                    currentStudentId = studentId;
+                    document.getElementById('loginDiv').style.display = 'none';
+                    document.getElementById('dataDiv').style.display = 'block';
+                    loadStudentData();
+                } else {
+                    document.getElementById('loginError').innerText = result.error || 'Invalid credentials';
+                }
+            } catch (err) {
+                document.getElementById('loginError').innerText = 'Login failed. Try again.';
+            }
+        }
 
-      // Calculate total fees
-      for(let k=1;k<=9;k++) total += Number(row[k] || 0);
-    }
-    document.getElementById("totalFees").textContent = "Total Fees: "+total;
-  });
-}
+        async function loadStudentData() {
+            try {
+                const url = `${scriptUrl}?action=getStudentFeeData&studentId=${encodeURIComponent(currentStudentId)}`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-function downloadPDF(studentId,rowIndex){
-  fetch(webAppUrl+"?studentId="+studentId+"&pdfRow="+rowIndex)
-  .then(res => res.blob())
-  .then(blob=>{
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = studentId+"_receipt.pdf";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  });
-}
-</script>
+                if (data.error) {
+                    document.getElementById('feeTable').innerHTML = `<p class="error">${data.error}</p>`;
+                    return;
+                }
+
+                // Build fee table
+                let html = '<table><tr><th>Month</th><th>Tuition</th><th>Admission</th><th>Re-Adm</th><th>Exam</th><th>Computer</th><th>Late</th><th>Sports</th><th>TC</th><th>Misc</th><th>Total</th><th>Receipt No</th></tr>';
+                data.months.forEach(monthRow => {
+                    html += '<tr>';
+                    monthRow.forEach(cell => {
+                        html += `<td>${cell !== undefined ? cell : ''}</td>`;
+                    });
+                    html += '</tr>';
+                });
+                // Totals row
+                html += '<tr><td><strong>Total</strong></td>';
+                data.totals.slice(1, 11).forEach(total => { // skip first column (Month label) and last (Receipt)
+                    html += `<td><strong>${total || 0}</strong></td>`;
+                });
+                html += '<td></td></tr>'; // empty for receipt column
+                html += '</table>';
+
+                document.getElementById('feeTable').innerHTML = html;
+            } catch (err) {
+                document.getElementById('feeTable').innerHTML = '<p class="error">Failed to load fee data.</p>';
+            }
+        }
+
+        function logout() {
+            currentStudentId = null;
+            document.getElementById('loginDiv').style.display = 'block';
+            document.getElementById('dataDiv').style.display = 'none';
+            document.getElementById('studentId').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('mobile').value = '';
+            document.getElementById('loginError').innerText = '';
+        }
+    </script>
 </body>
 </html>
