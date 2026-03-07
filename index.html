@@ -1,418 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>Student Fee Portal · +8801 auto</title>
-    <!-- Font Awesome 6 for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Student Fee Portal</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(145deg, #eef2f7 0%, #d9e2ef 100%);
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
         }
-
-        /* main card container */
-        .portal-card {
-            max-width: 560px;
-            width: 100%;
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 30px 55px -20px rgba(10,30,60,0.3), 0 1px 2px rgba(255,255,255,0.5) inset;
-            padding: 2.2rem 2rem;
-            transition: all 0.2s ease;
+        .login-container, .data-container { 
+            max-width: 450px; 
+            margin: 50px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
         }
-
-        .portal-card h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #1e2f40, #254b6d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .data-container { 
+            max-width: 900px; 
         }
-
-        .portal-card h2 i {
-            background: #ffffffd0;
-            padding: 12px;
-            border-radius: 24px;
-            color: #1f4b7a;
-            box-shadow: 0 6px 16px rgba(0,20,50,0.08);
-            -webkit-text-fill-color: #1f4b7a;
-            font-size: 1.4rem;
+        h2 { 
+            color: #333; 
+            margin-bottom: 25px; 
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
-
-        .sub-head {
-            color: #496d91;
-            margin-bottom: 2rem;
-            font-weight: 400;
-            font-size: 1rem;
-            border-left: 4px solid #3f7eb6;
-            padding-left: 1rem;
-            background: #ffffff40;
-            border-radius: 0 20px 20px 0;
+        .form-group {
+            margin-bottom: 20px;
         }
-
-        /* login container (no extra bg, uses parent) */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        /* modern input group with icon */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 0.8rem;
-        }
-
-        .input-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
             font-weight: 500;
-            color: #1f3a57;
-            margin-bottom: 6px;
-            font-size: 0.95rem;
         }
-
-        .input-label i {
-            color: #2b659b;
-            width: 20px;
-            font-size: 1rem;
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
-
-        /* special mobile wrapper with prefix */
-        .mobile-wrapper {
-            display: flex;
-            align-items: center;
-            background: white;
-            border: 1px solid #d7e0e9;
-            border-radius: 24px;
-            padding: 0 4px 0 20px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(0,20,30,0.02);
-        }
-        .mobile-wrapper:focus-within {
-            border-color: #3f7eb6;
-            box-shadow: 0 8px 18px rgba(35, 100, 163, 0.08);
-        }
-
-        .mobile-prefix {
-            font-weight: 600;
-            color: #115293;
-            background: #eaf1fb;
-            padding: 8px 12px;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-        }
-
-        .mobile-wrapper input {
-            flex: 1;
-            border: none;
-            padding: 14px 12px 14px 8px;
-            font-size: 1rem;
-            background: transparent;
+        input:focus {
             outline: none;
-            border-radius: 24px;
-            font-weight: 500;
+            border-color: #667eea;
         }
-        .mobile-wrapper input::-webkit-outer-spin-button,
-        .mobile-wrapper input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        /* standard input style for id & name */
-        .input-field {
+        button { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            padding: 12px 30px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: 600;
             width: 100%;
-            padding: 15px 20px;
-            border: 1px solid #d7e0e9;
-            border-radius: 30px;
-            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .logout { 
+            float: right; 
+            width: auto;
+            padding: 8px 20px;
+            background: #f44336;
+        }
+        .logout:hover {
+            background: #d32f2f;
+        }
+        .error { 
+            color: #f44336; 
+            margin: 10px 0; 
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .success {
+            color: #4caf50;
+            margin: 10px 0;
+        }
+        .info-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .info-box p {
+            margin: 5px 0;
+            color: #333;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
             background: white;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(0,20,30,0.02);
-        }
-        .input-field:focus {
-            border-color: #3f7eb6;
-            box-shadow: 0 8px 18px rgba(35, 100, 163, 0.08);
-        }
-
-        /* login button */
-        .login-btn {
-            background: #1d3f5e;
-            color: white;
-            border: none;
-            padding: 16px 28px;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 1.2rem;
-            transition: background 0.15s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 10px 25px -7px #1d3f5e80;
-        }
-
-        .login-btn:hover {
-            background: #0f2e45;
-            box-shadow: 0 15px 30px -7px #143850;
-        }
-        .login-btn:active {
-            transform: scale(0.98);
-        }
-
-        .error-message {
-            background: #ffefed;
-            color: #b13e3e;
-            padding: 12px 18px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid #f3cdcc;
-        }
-
-        /* data container (logout view) */
-        .data-container {
-            width: 100%;
-        }
-
-        .data-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .data-header h2 {
-            margin-bottom: 0;
-            font-size: 1.8rem;
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: 1.5px solid #38658f;
-            color: #38658f;
-            padding: 12px 22px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
-        .logout-btn:hover {
-            background: #dbe7f3;
-        }
-
-        .student-info-card {
-            background: #e6f0fa;
-            padding: 1.2rem 1.8rem;
-            border-radius: 30px;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem 2.5rem;
-            border: 1px solid #b9d3ef;
-            font-weight: 500;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #1e3b58;
-        }
-        .info-item i {
-            color: #20649b;
-            width: 22px;
-        }
-
-        /* fee table wrapper with horizontal scroll on small */
-        .table-responsive {
-            overflow-x: auto;
-            border-radius: 28px;
-            background: #ffffffb0;
-            padding: 0.2rem;
-            box-shadow: 0 8px 22px rgba(0,20,40,0.08);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 860px;  /* ensures table doesn't squish, scroll appears */
-            border-radius: 24px;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        th {
-            background: #1d3f5e;
-            color: white;
-            font-weight: 600;
-            font-size: 0.8rem;
-            padding: 14px 6px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            white-space: nowrap;
-        }
-
-        td {
-            background: white;
-            padding: 12px 6px;
-            text-align: center;
-            border-bottom: 1px solid #d8e2ed;
-            font-size: 0.9rem;
-            color: #102433;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:last-child td {
-            background: #ecf3fa;
+        th { 
+            background: #667eea; 
+            color: white; 
+            padding: 12px; 
+            text-align: left; 
             font-weight: 600;
         }
-
-        .badge-success {
-            background: #dff0d9;
-            color: #1d6b2c;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+        td { 
+            border: 1px solid #e0e0e0; 
+            padding: 10px; 
+            text-align: left; 
         }
-
-        /* tiny responsive */
-        @media (max-width: 480px) {
-            .portal-card { padding: 1.8rem 1.2rem; }
-            .portal-card h2 { font-size: 1.8rem; }
-            .mobile-prefix { padding: 8px 8px; }
-            .student-info-card { flex-direction: column; gap: 0.8rem; }
+        tr:nth-child(even) { 
+            background: #f8f9fa; 
+        }
+        tr:hover {
+            background: #f0f0f0;
+        }
+        .hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .student-name {
+            text-transform: capitalize;
         }
     </style>
 </head>
 <body>
-    <div class="portal-card" id="portalCard">
-        <!-- login view -->
-        <div id="loginDiv">
-            <h2><i class="fas fa-graduation-cap"></i> Student Fee Portal</h2>
-            <div class="sub-head">Login with your credentials</div>
-            <div class="login-container">
-                <!-- student id field -->
-                <div class="input-group">
-                    <div class="input-label"><i class="fas fa-id-card"></i> Student ID</div>
-                    <input type="text" id="studentId" class="input-field" placeholder="e.g. 23102" autocomplete="off">
-                </div>
-
-                <!-- full name field -->
-                <div class="input-group">
-                    <div class="input-label"><i class="fas fa-user-graduate"></i> Full Name</div>
-                    <input type="text" id="name" class="input-field" placeholder="your full name">
-                </div>
-
-                <!-- mobile with +8801 prefix -->
-                <div class="input-group">
-                    <div class="input-label"><i class="fas fa-mobile-alt"></i> Mobile Number</div>
-                    <div class="mobile-wrapper">
-                        <span class="mobile-prefix">+8801</span>
-                        <input type="text" id="mobileLast" placeholder="9-digit number" maxlength="9" inputmode="numeric" pattern="\d*">
-                    </div>
-                    <div style="font-size:0.8rem; color:#496f92; margin-left: 16px; margin-top: 4px;">
-                        <i class="far fa-info-circle"></i> only last 9 digits (e.g., 712345678)
-                    </div>
-                </div>
-
-                <button class="login-btn" onclick="login()"><i class="fas fa-arrow-right-to-bracket"></i> Login to Dashboard</button>
-                <div id="loginError" class="error-message" style="display: none;"></div>
-            </div>
+    <div id="loginDiv" class="login-container">
+        <h2>📚 Student Login Portal</h2>
+        <div class="form-group">
+            <label>Student ID (6 digits)</label>
+            <input type="text" id="studentId" placeholder="e.g., 000123" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+            <div class="hint">Maximum 6 digits</div>
         </div>
-
-        <!-- data view (hidden initially) -->
-        <div id="dataDiv" style="display: none;">
-            <div class="data-header">
-                <h2><i class="fas fa-file-invoice"></i> Fee Details</h2>
-                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            </div>
-            <div id="studentInfo" class="student-info-card"></div>
-            <div class="table-responsive" id="feeTable"></div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" class="student-name" oninput="autoCapitalizeName(this)" />
+            <div class="hint">First letter of each word will be capitalized</div>
         </div>
+        <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="text" id="mobile" placeholder="Enter 11 digits" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+            <div class="hint">Enter last 11 digits (e.g., 1712345678)</div>
+        </div>
+        <button onclick="login()">Login</button>
+        <div id="loginError" class="error"></div>
+    </div>
+
+    <div id="dataDiv" class="data-container" style="display:none;">
+        <h2>📊 Your Fee Details 
+            <button class="logout" onclick="logout()">Logout</button>
+        </h2>
+        <div class="info-box" id="studentInfo"></div>
+        <div id="feeTable"></div>
     </div>
 
     <script>
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycby4D-wrff-70DVGCOfCecKznqo7Eqd14vwXkUcVBAg6kZxYyxAtyj3yecmgPT_UcaRb/exec'; // Replace with actual deployed URL
+        const scriptUrl = 'YOUR_APPS_SCRIPT_WEB_APP_URL'; // Replace with your deployed URL
         let currentStudentId = null;
 
-        // combine full mobile: +8801 + last 9 digits
-        function getFullMobile() {
-            const last = document.getElementById('mobileLast').value.trim().replace(/\D/g, '');
-            if (last.length === 0) return '';
-            // ensure it doesn't exceed 9 digits, but we take as is
-            return '+8801' + last;
-        }
-
-        // show error
-        function showError(message) {
-            const errDiv = document.getElementById('loginError');
-            errDiv.style.display = 'flex';
-            errDiv.innerHTML = `<i class="fas fa-circle-exclamation"></i> ${message}`;
+        // Auto-capitalize name as user types
+        function autoCapitalizeName(input) {
+            let value = input.value;
+            // Convert to lowercase first, then capitalize first letter of each word
+            value = value.toLowerCase().replace(/\b\w/g, function(l) { 
+                return l.toUpperCase(); 
+            });
+            input.value = value;
         }
 
         async function login() {
-            const studentId = document.getElementById('studentId').value.trim();
-            const name = document.getElementById('name').value.trim();
-            const mobileLast = document.getElementById('mobileLast').value.trim().replace(/\D/g, '');
-            
-            // reset error
-            const errDiv = document.getElementById('loginError');
-            errDiv.style.display = 'none';
+            let studentId = document.getElementById('studentId').value.trim();
+            let name = document.getElementById('name').value.trim();
+            let mobile = document.getElementById('mobile').value.trim();
 
-            if (!studentId || !name) {
-                showError('Student ID and Name are required');
+            // Validate before sending
+            if (!studentId || !name || !mobile) {
+                document.getElementById('loginError').innerText = 'All fields are required';
                 return;
             }
 
-            if (!mobileLast || mobileLast.length !== 9) {
-                showError('Please enter exactly 9 digits after +8801');
+            // Validate ID length
+            if (studentId.length > 6) {
+                document.getElementById('loginError').innerText = 'Student ID cannot exceed 6 digits';
                 return;
             }
 
-            const fullMobile = '+8801' + mobileLast;
+            // Validate mobile length
+            if (mobile.length !== 11) {
+                document.getElementById('loginError').innerText = 'Mobile number must be exactly 11 digits';
+                return;
+            }
+
+            // Format name for display (already auto-capitalized)
+            // Add +88 to mobile for comparison with stored data
+            const formattedMobile = '+88' + mobile;
 
             try {
-                const url = `${scriptUrl}?action=validateStudent&studentId=${encodeURIComponent(studentId)}&name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(fullMobile)}`;
+                const url = `${scriptUrl}?action=validateStudent&studentId=${encodeURIComponent(studentId)}&name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(formattedMobile)}`;
                 const response = await fetch(url);
                 const result = await response.json();
 
@@ -420,12 +214,20 @@
                     currentStudentId = studentId;
                     document.getElementById('loginDiv').style.display = 'none';
                     document.getElementById('dataDiv').style.display = 'block';
+                    
+                    // Display student info
+                    document.getElementById('studentInfo').innerHTML = `
+                        <p><strong>Student ID:</strong> ${studentId}</p>
+                        <p><strong>Name:</strong> ${name}</p>
+                        <p><strong>Mobile:</strong> ${formattedMobile}</p>
+                    `;
+                    
                     loadStudentData();
                 } else {
-                    showError(result.error || 'Invalid credentials');
+                    document.getElementById('loginError').innerText = result.error || 'Invalid credentials';
                 }
             } catch (err) {
-                showError('Login failed. Check connection.');
+                document.getElementById('loginError').innerText = 'Login failed. Please try again.';
                 console.error(err);
             }
         }
@@ -437,51 +239,42 @@
                 const data = await response.json();
 
                 if (data.error) {
-                    document.getElementById('feeTable').innerHTML = `<div class="error-message" style="display:flex;"><i class="fas fa-exclamation-triangle"></i> ${data.error}</div>`;
+                    document.getElementById('feeTable').innerHTML = `<p class="error">${data.error}</p>`;
                     return;
                 }
 
-                // build student info (optional)
-                if (data.studentName) {
-                    document.getElementById('studentInfo').innerHTML = `
-                        <div class="info-item"><i class="fas fa-id-card"></i> ID: ${data.studentId || currentStudentId}</div>
-                        <div class="info-item"><i class="fas fa-user"></i> ${data.studentName}</div>
-                        <div class="info-item"><i class="fas fa-mobile-alt"></i> ${data.mobile || ''}</div>
-                    `;
-                } else {
-                    document.getElementById('studentInfo').innerHTML = `<div class="info-item"><i class="fas fa-user"></i> Logged in</div>`;
-                }
-
                 // Build fee table
-                let html = '<table><tr><th>Month</th><th>Tuition</th><th>Admission</th><th>Re-Adm</th><th>Exam</th><th>Computer</th><th>Late</th><th>Sports</th><th>TC</th><th>Misc</th><th>Total</th><th>Receipt No</th></tr>';
+                let html = '<table><tr><th>Month</th><th>Tuition</th><th>Admission</th><th>Re-Adm</th><th>Exam</th><th>Computer</th><th>Late</th><th>Sports</th><th>TC</th><th>Misc</th><th>Total</th><th>Receipt</th></tr>';
                 
-                if (data.months && data.months.length) {
-                    data.months.forEach(monthRow => {
-                        html += '<tr>';
-                        monthRow.forEach(cell => {
+                // Months data (rows 10-21)
+                data.months.forEach(monthRow => {
+                    html += '<tr>';
+                    monthRow.forEach((cell, index) => {
+                        // Format numbers with 2 decimal places if they're numeric
+                        if (index > 0 && index < 11 && !isNaN(cell) && cell !== '') {
+                            html += `<td>₹${Number(cell).toFixed(2)}</td>`;
+                        } else {
                             html += `<td>${cell !== undefined && cell !== null ? cell : ''}</td>`;
-                        });
-                        html += '</tr>';
+                        }
                     });
-                } else {
-                    html += '<tr><td colspan="12" style="text-align:center;">No monthly records</td></tr>';
-                }
-
-                // Totals row (if exists)
-                if (data.totals && data.totals.length) {
-                    html += '<tr><td><strong>Total</strong></td>';
-                    // skip first column (Month label) and last (Receipt) - assuming totals array matches 12 cols
-                    for (let i = 1; i <= 10; i++) {  // indices 1 to 10 (skip month col 0 and receipt col 11)
-                        const val = data.totals[i] !== undefined ? data.totals[i] : 0;
-                        html += `<td><strong>${val}</strong></td>`;
+                    html += '</tr>';
+                });
+                
+                // Totals row (row 22)
+                html += '<tr style="background: #e3f2fd; font-weight: bold;">';
+                data.totals.forEach((total, index) => {
+                    if (index === 0) {
+                        html += '<td>Total</td>';
+                    } else if (index < 11) { // Skip receipt column in totals
+                        html += `<td>₹${Number(total || 0).toFixed(2)}</td>`;
                     }
-                    html += '<td></td></tr>'; // empty for receipt column
-                }
+                });
+                html += '<td></td></tr>'; // Empty for receipt column
                 html += '</table>';
 
                 document.getElementById('feeTable').innerHTML = html;
             } catch (err) {
-                document.getElementById('feeTable').innerHTML = `<div class="error-message" style="display:flex;"><i class="fas fa-plug"></i> Failed to load fee data.</div>`;
+                document.getElementById('feeTable').innerHTML = '<p class="error">Failed to load fee data.</p>';
                 console.error(err);
             }
         }
@@ -492,13 +285,22 @@
             document.getElementById('dataDiv').style.display = 'none';
             document.getElementById('studentId').value = '';
             document.getElementById('name').value = '';
-            document.getElementById('mobileLast').value = '';
-            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('mobile').value = '';
+            document.getElementById('loginError').innerText = '';
         }
 
-        // optional: restrict input to digits only for mobileLast
-        document.getElementById('mobileLast').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '').slice(0, 9);
+        // Add input validation for mobile field
+        document.getElementById('mobile').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
+        });
+
+        document.getElementById('studentId').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+        });
+
+        // Auto-capitalize name on blur as well
+        document.getElementById('name').addEventListener('blur', function(e) {
+            autoCapitalizeName(this);
         });
     </script>
 </body>
